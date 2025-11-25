@@ -1,5 +1,5 @@
-from view.testView import TestView
-from model.testModel import Model
+from view.view import TestView
+from model.model import Model
 
 class TestPresenter:
     def __init__(self):
