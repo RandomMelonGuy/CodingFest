@@ -1,19 +1,29 @@
-from customtkinter import CTk, CTkButton, CTkEntry, CTkLabel
-
+from customtkinter import CTk, CTkTabview, CTkButton, CTkEntry, CTkLabel
+from .tabs.AddTab import AddTab
 
 class TestView(CTk):
     def __init__(self, presenter):
         super().__init__()
         self.presenter = presenter
-        self.label = CTkLabel(self)
-        self.entry = CTkEntry(self)
-        self.button = CTkButton(self, command=self.sendData)
-        self.entry.pack()
-        self.label.pack()
-        self.button.pack()
+        self.geometry(f'665x340+{(self.winfo_screenwidth() - 665) // 2}+{(self.winfo_screenheight() - 340) // 2}')
+        self.minsize(665, 340)
+        self.maxsize(665, 340)
+        self.tabview = CTkTabview(self)
+        self.tabview.pack(padx=20, pady=20, fill="both", expand=True)
 
-    def sendData(self):
-        # need data -> send request -> get responce -> update data
-        maxVal = int(self.entry.get())
-        responce = self.presenter.get_random(maxVal)
-        self.label.configure(text=responce)
+        self.tab1 = self.tabview.add("Добавить материал")
+        self.tab2 = self.tabview.add("Просмотр и фильтрация")
+        self.tab3 = self.tabview.add("Списание/пополнение")
+        self.tab4 = self.tabview.add("Загрузка данных")
+
+        AddTab(self.tab1, self.presenter)
+
+        self.set_tab4()
+
+    def set_tab4(self):
+        self.tab4_label = CTkLabel(self.tab4, text = "Для начала работы перетащите файл в папку 'Data' или же создаёте пустой шаблон")
+        self.tab4_label.pack(pady=5)
+        self.tab4_button_1 = CTkButton(self.tab4, text = "Закрыть")
+        self.tab4_button_1.place(y=35, x=125)
+        self.tab4_button_2 = CTkButton(self.tab4, text="Создать шаблон")
+        self.tab4_button_2.place(y=35, x=320)
