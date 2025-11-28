@@ -1,5 +1,70 @@
-from random import randint
-
+from pandas import read_excel, DataFrame, ExcelWriter, concat
 class Model:
-    def get_random(self, maxVal: int) -> int:
-        return randint(1,maxVal)
+    def __init__(self, working_file):
+        self.workFile = working_file
+        self.excel = read_excel(working_file, engine="openpyxl")
+        self.columns = ["ID","Вид материала", "Размер катушки / вес, кг", "Сечение", "Цвет", "Условия хранения", "Статус", "Остаток"]
+
+    def add_row(self, data):
+        if len(self.excel["ID"]) == 0:
+            id = 0
+        else:
+            id = self.excel["ID"].max() + 1
+        dfData = {i: [j] for i, j in zip(self.columns[1:], data)}
+        dfData["ID"] = [id]
+        df = DataFrame(dfData)
+        newDF = concat([self.excel, df])
+        self.excel = newDF
+        return newDF
+
+    def get_data(self):
+        return [self.columns, *self.excel.values.tolist()]
+    
+    def save(self):
+        with ExcelWriter(self.workFile) as writer:
+            self.excel.to_excel(writer, sheet_name="Лист 1", index=False)
+
+    def get_filtred_rows(self, **kvargs):
+        data = self.excel.values.tolist()
+        dictedData = [dict(zip(self.columns, i)) for i in data]
+        if color := kvargs.get("color"):
+            dictedData = [i for i in dictedData if i["Цвет"] == color]
+
+        if id := kvargs.get("ID"):
+            dictedData = [i for i in dictedData if i["ID"] == id]
+
+        if material_type := kvargs.get("material_type"):
+            dictedData = [i for i in dictedData if i["Вид материала"] == material_type]
+
+        if weihgt := kvargs.get("weight"):
+            dictedData = [i for i in dictedData if i["Размер катушки / вес, кг"] == weihgt]
+        
+        if conds := kvargs.get("conds"):
+            dictedData = [i for i in dictedData if i["Условия хранения"] == conds]
+
+        if status := kvargs.get("status"):
+            dictedData = [i for i in dictedData if i["Статус"] == status]
+
+        if width := kvargs.get("width"):
+            dictedData = [i for i in dictedData if i["Сечение"] == width]
+
+        if rest := kvargs.get("rest"):
+            dictedData = [i for i in dictedData if i["Остаток"] == rest]
+        
+        filtredData = [self.columns, *[list(i.values()) for i in dictedData]]
+
+        return filtredData
+ 
+    def editRow(self, amount: int, rowID: int, operation: str):
+        rest = self.excel.loc[rowID, "Остаток"]
+        if operation == "substract" and int(rest) < amount:
+            return "UNABLE TO PROCEED"
+        elif operation == "substract" and int(rest) >= amount:
+            self.excel.loc[rowID, "Остаток"] = int(rest) - amount
+        elif operation == "add":
+            self.excel.loc[rowID, "Остаток"] = int(rest) + amount
+
+        print(self.excel.loc[rowID, "Остаток"])
+
+    def get_row_data(self, rowID: int):
+        return self.excel.loc(rowID)

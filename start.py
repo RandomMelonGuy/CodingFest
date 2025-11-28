@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 def create_base_file(savepath: Path, filename: str):
-        data = pd.DataFrame({"Вид материала": [], "Размер катушки / вес, кг": [], "Сечение": [], "Цвет": [], "Условия хранения": [], "Статус": [], "Остаток": []})
+        data = pd.DataFrame({"ID": [],"Вид материала": [], "Размер катушки / вес, кг": [], "Сечение": [], "Цвет": [], "Условия хранения": [], "Статус": [], "Остаток": []})
         excelWriter = pd.ExcelWriter(savepath / filename, engine="openpyxl")
         data.to_excel(excelWriter, sheet_name="Лист 1", index=False)
         excelWriter.close()

@@ -1,4 +1,4 @@
-from view.view import TestView
+from view.view1 import TestView
 from model.model import Model
 
 class TestPresenter:
@@ -7,17 +7,24 @@ class TestPresenter:
         self.view = TestView(self)
         self.view.mainloop()
     
-    def upload_file(self, filepath: str) -> str:
-        responce = self.model.setup(filepath)
-        return responce
+    #def upload_file(self, filepath: str) -> str:
+    #    responce = self.model.setup(filepath)
+    #    return responce
     
     def print_data(self):
-        responce = self.model.print_data()
+        responce = self.model.get_data()
         return responce
     
     def add_row(self, data):
         responce = self.model.add_row(data)
         return responce
     
+    def filter_data(self, **filters):
+        responce = self.model.get_filtred_rows(**filters)
+        return responce
+
+    def edit_row(self, rowID: int, amount: int, operation: str):
+        return self.model.editRow(amount=amount, rowID=rowID, operation=operation)
+
     def save(self):
         self.model.save()
