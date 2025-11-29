@@ -1,4 +1,4 @@
-from view.view1 import TestView
+from view.view import TestView
 from model.model import Model
 
 class TestPresenter:
