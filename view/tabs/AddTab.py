@@ -1,4 +1,4 @@
-from customtkinter import CTkEntry, CTkLabel, CTkFrame
+from customtkinter import CTkEntry, CTkLabel, CTkFrame, CTkButton
 
 class AddTab(CTkFrame):
     def __init__(self, tabComponent: CTkFrame, presenter):
@@ -38,3 +38,5 @@ class AddTab(CTkFrame):
         self.tab_label_6.place(y=26, x=450)
         self.tab_label_7 = CTkLabel(self.tab, text="Остаток")
         self.tab_label_7.place(y=26, x=530)
+        self.tab1_button_1 = CTkButton(self.tab, text = "Отправить")
+        self.tab1_button_1.pack(pady=90)

@@ -1,5 +1,8 @@
+import customtkinter as ctk
 from customtkinter import CTk, CTkTabview, CTkButton, CTkEntry, CTkLabel
+from CTkTable import CTkTable
 from .tabs.AddTab import AddTab
+from .tabs.browseTab import BrowseTab
 
 class TestView(CTk):
     def __init__(self, presenter):
@@ -8,6 +11,8 @@ class TestView(CTk):
         self.geometry(f'665x340+{(self.winfo_screenwidth() - 665) // 2}+{(self.winfo_screenheight() - 340) // 2}')
         self.minsize(665, 340)
         self.maxsize(665, 340)
+        self.curIndex = 0
+        self.per_page = 3
         self.tabview = CTkTabview(self)
         self.tabview.pack(padx=20, pady=20, fill="both", expand=True)
 
@@ -18,7 +23,9 @@ class TestView(CTk):
 
         AddTab(self.tab1, self.presenter)
 
+        BrowseTab(master=self.tab2, presenter=self.presenter)
         self.set_tab4()
+
 
     def set_tab4(self):
         self.tab4_label = CTkLabel(self.tab4, text = "Для начала работы перетащите файл в папку 'Data' или же создаёте пустой шаблон")
