@@ -1,16 +1,28 @@
 from pandas import read_excel, DataFrame, ExcelWriter, concat
+from datetime import datetime
 class Model:
     def __init__(self, working_file):
         self.workFile = working_file
         self.excel = read_excel(working_file, engine="openpyxl")
-        self.columns = ["ID","Вид материала", "Размер катушки / вес, кг", "Сечение", "Цвет", "Условия хранения", "Статус", "Остаток"]
+        self.columns = ["ID","Дата","Вид материала", "Размер катушки / вес, кг", "Сечение", "Цвет", "Условия хранения", "Статус", "Остаток"]
 
     def add_row(self, data):
         if len(self.excel["ID"]) == 0:
             id = 0
         else:
             id = self.excel["ID"].max() + 1
-        dfData = {i: [j] for i, j in zip(self.columns[1:], data)}
+        #dfData = {i: [j] for i, j in zip(self.columns[1:], data)}
+        dfData = {
+            "ID": [id],
+            "Дата": [datetime.now().strftime("%d.%m.%Y")],  # ← АВТОМАТИЧЕСКИ!
+            "Вид материала": [data[0]],
+            "Размер катушки / вес, кг": [data[1]],
+            "Сечение": [data[2]],
+            "Цвет": [data[3]],
+            "Условия хранения": [data[4]],
+            "Статус": [data[5]],
+            "Остаток": [data[6]]
+        }
         dfData["ID"] = [id]
         df = DataFrame(dfData)
         newDF = concat([self.excel, df])
@@ -31,6 +43,7 @@ class Model:
     def get_filtred_rows(self, **kvargs):
         data = self.excel.values.tolist()
         dictedData = [dict(zip(self.columns, i)) for i in data]
+        print(dictedData)
         if color := kvargs.get("color"):
             dictedData = [i for i in dictedData if i["Цвет"] == color]
 

@@ -116,6 +116,3 @@ class TestPresenter:
             return parsedWeight, parsedDiameter
         else:
             return False
-        
-    def prepare_date(self, data):
-        return [datetime.now().strftime("%d.%m.%Y")] + data

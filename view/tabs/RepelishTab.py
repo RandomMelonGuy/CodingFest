@@ -64,10 +64,12 @@ class RepelishTab(CTkFrame):
             self.tab3_label_4 = CTkLabel(self.master, text=" ")
             self.tab3_label_4.place(x=265, y=135)
         
-        self.tab3_label.configure(text=f"Тип: {data[1]}")
-        self.tab3_label_1.configure(text=f"Цвет: {data[4]}")
-        self.tab3_label_2.configure(text=f"Сечение: {data[3]}")
-        self.tab3_label_3.configure(text=f"Вес катушки: {data[2]}")
+        print(data)
+
+        self.tab3_label.configure(text=f"Тип: {data[2]}")
+        self.tab3_label_1.configure(text=f"Цвет: {data[5]}")
+        self.tab3_label_2.configure(text=f"Сечение: {data[4]}")
+        self.tab3_label_3.configure(text=f"Вес катушки: {data[3]}")
         self.tab3_label_4.configure(text=f"Остаток: {data[-1]}")
 
     def update_combo(self):

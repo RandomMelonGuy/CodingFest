@@ -71,3 +71,5 @@ class AddTab(CTkFrame):
             for i in responce["detail"]:
                 values += i["name"] + "\n"
             CTkMessagebox(master=self.tab, icon="cancel", message=values, title="ERROR")
+        else:
+            CTkMessagebox(master=self.tab, title="SUCESS", message="Материал создан успешно")
