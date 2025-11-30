@@ -40,10 +40,13 @@ class Model:
         with ExcelWriter(self.workFile) as writer:
             self.excel.to_excel(writer, sheet_name="Лист 1", index=False)
 
+    def export(self, filepath):
+        with ExcelWriter(filepath) as writer:
+            self.excel.to_excel(writer, sheet_name="Лист 1", index=False)
+
     def get_filtred_rows(self, **kvargs):
         data = self.excel.values.tolist()
         dictedData = [dict(zip(self.columns, i)) for i in data]
-        print(dictedData)
         if color := kvargs.get("color"):
             dictedData = [i for i in dictedData if i["Цвет"] == color]
 
@@ -85,7 +88,6 @@ class Model:
             self.excel.loc[rowID, "Остаток"] = rest + amount
             new_rest += amount
 
-        print(rest)
         self.update_status(rowID=rowID, rest=int(new_rest))
 
     def get_data_length(self, **filters):

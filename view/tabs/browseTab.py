@@ -19,12 +19,14 @@ class BrowseTab(CTkFrame):
         if self.curIndex + self.per_page < dataLength:
             self.curIndex += self.per_page
             data = self.presenter.get_data(self.curIndex, self.curIndex + self.per_page, **self.filterList)
+            self.values = data
             self.table.configure(values=[self.headers] + data[1:])
 
     def ChangingTable_back(self): 
         """Обновление данных в таблице"""
         if self.curIndex - self.per_page >= 0:
             data = self.presenter.get_data(self.curIndex - self.per_page, self.curIndex, **self.filterList)
+            self.values = data
             self.curIndex -= self.per_page
             self.table.configure(values=[self.headers] + data[1:])
 
@@ -60,7 +62,15 @@ class BrowseTab(CTkFrame):
 
     def setupData(self):
         self.values = self.presenter.get_data(self.curIndex, self.curIndex + self.per_page)
-        self.table.configure(values=[self.headers] + self.values[1:])
+        if hasattr(self, 'table'):
+            self.table.destroy()
+        
+        self.table = CTkTable(
+            master=self.master, 
+            values=[self.headers] + self.values[1:],
+            command=self.view_info
+        )
+        self.table.pack(expand=True, fill="both", padx=20, pady=(40, 20))
 
     def apply_filters(self):
         self.curIndex = 0
@@ -70,7 +80,7 @@ class BrowseTab(CTkFrame):
         filterParams = {key: value for key, value in dictedData.items() if value != ""}
         self.filterList = filterParams
         filtredData = self.presenter.get_data(start_index=self.curIndex, per_page=self.per_page,**filterParams)
-        self.table.configure(values=filtredData)
+        self.table.configure(values=[self.headers]+filtredData[1:])
 
     def view_info(self, row):
         data = map(str, self.values[row["row"]])

@@ -10,9 +10,12 @@ class TestPresenter:
         self.fields = ["Вид материала", "Размер катушки / вес, кг", "Сечение", "Цвет", "Условия хранения", "Статус", "Остаток"]
         self.view.mainloop()
     
-    #def upload_file(self, filepath: str) -> str:
-    #    responce = self.model.setup(filepath)
-    #    return responce
+    def export_file(self, filepath: str):
+        try:
+            self.model.export(filepath)
+            return True
+        except:
+            return False
 
     def get_row(self, rowID: int):
         return self.model.get_row_data(rowID=rowID)
@@ -98,7 +101,6 @@ class TestPresenter:
     def parse_diameter(self, data: str):
         numbers = re.findall(r'\d+\.?\d*', data)
         if len(numbers) > 0:
-            print(numbers[0])
             if float(numbers[0]) <= 0:
                 return False
             return float(numbers[0])

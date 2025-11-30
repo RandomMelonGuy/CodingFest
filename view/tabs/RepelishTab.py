@@ -64,7 +64,6 @@ class RepelishTab(CTkFrame):
             self.tab3_label_4 = CTkLabel(self.master, text=" ")
             self.tab3_label_4.place(x=265, y=135)
         
-        print(data)
 
         self.tab3_label.configure(text=f"Тип: {data[2]}")
         self.tab3_label_1.configure(text=f"Цвет: {data[5]}")

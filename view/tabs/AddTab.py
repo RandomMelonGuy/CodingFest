@@ -65,7 +65,6 @@ class AddTab(CTkFrame):
         data = [i.get() for i in self.entries]
         responce = self.presenter.add_row(data)
         values = ""
-        print(responce)
         if responce["status"] == "error":
             self.hightlight_fields(responce["detail"])
             for i in responce["detail"]:
