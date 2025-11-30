@@ -27,8 +27,8 @@ class BrowseTab(CTkFrame):
             self.table.configure(values=data)
 
     def setupUI(self):
-        values = self.presenter.get_data(self.curIndex, self.curIndex + self.per_page)
-        self.table = CTkTable(master=self.master, values=values)
+        self.values = self.presenter.get_data(self.curIndex, self.curIndex + self.per_page)
+        self.table = CTkTable(master=self.master, values=self.values)
         self.table.pack(expand=True, fill="both", padx=20, pady=20)
         self.tab2_button_1 = CTkButton(self.master, width=1, text=">", command=self.ChangingTable_next) #Вперёд
         self.tab2_button_1.place(y=105, x=590)
@@ -55,6 +55,9 @@ class BrowseTab(CTkFrame):
 
         self.applyBtn = CTkButton(self.master, width=30, height=10, text="Применить", command=self.apply_filters)
         self.applyBtn.place(x=475, y=8)
+
+    def setupData(self):
+        self.values = self.presenter.get_data(self.curIndex, self.curIndex + self.per_page)
 
     def apply_filters(self):
         self.curIndex = 0

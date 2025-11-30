@@ -1,6 +1,7 @@
 from view.view import TestView
 from model.model import Model
 import re
+from datetime import datetime
 
 class TestPresenter:
     def __init__(self, working_file):
@@ -115,3 +116,6 @@ class TestPresenter:
             return parsedWeight, parsedDiameter
         else:
             return False
+        
+    def prepare_date(self):
+        return datetime.now().strftime("%d.%m.%Y")

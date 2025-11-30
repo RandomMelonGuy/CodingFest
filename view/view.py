@@ -31,6 +31,8 @@ class TestView(CTk):
     def on_switch(self):
         if self.tabview.get() == "Списание/пополнение":
             self.repTab.update_combo()
+        elif self.tabview.get() == "Просмотр и фильтрация":
+            self.browseTab.setupData()
 
     def on_closing(self):
         self.presenter.save()

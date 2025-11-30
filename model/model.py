@@ -15,6 +15,7 @@ class Model:
         df = DataFrame(dfData)
         newDF = concat([self.excel, df])
         self.excel = newDF
+        self.excel.reset_index(drop=True, inplace=True)
         return newDF
 
     def get_data(self, **filters):
@@ -59,13 +60,14 @@ class Model:
         return filtredData
  
     def editRow(self, amount: int, rowID: int, operation: str):
+        #row_index = self.excel[self.excel["ID"] == rowID].index
         rest = self.excel.loc[rowID, "Остаток"]
-        if operation == "substract" and int(rest) < amount:
+        if operation == "substract" and rest.astype(int) < amount:
             return "UNABLE TO PROCEED"
-        elif operation == "substract" and int(rest) >= amount:
-            self.excel.loc[rowID, "Остаток"] = int(rest) - amount
+        elif operation == "substract" and rest.astype(int) >= amount:
+            self.excel.loc[rowID, "Остаток"] = rest.astype(int) - amount
         elif operation == "add":
-            self.excel.loc[rowID, "Остаток"] = int(rest) + amount
+            self.excel.loc[rowID, "Остаток"] = rest.astype(int) + amount
 
         print(self.excel.loc[rowID, "Остаток"])
         self.update_status(rowID=rowID, rest=int(rest))
