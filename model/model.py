@@ -17,8 +17,11 @@ class Model:
         self.excel = newDF
         return newDF
 
-    def get_data(self):
-        return [self.columns, *self.excel.values.tolist()]
+    def get_data(self, **filters):
+        if not filters:
+            return [self.columns, *self.excel.values.tolist()]
+        else:
+            return self.get_filtred_rows(**filters)
     
     def save(self):
         with ExcelWriter(self.workFile) as writer:
@@ -31,7 +34,7 @@ class Model:
             dictedData = [i for i in dictedData if i["Цвет"] == color]
 
         if id := kvargs.get("ID"):
-            dictedData = [i for i in dictedData if i["ID"] == id]
+            dictedData = [i for i in dictedData if i["ID"] == int(id)]
 
         if material_type := kvargs.get("material_type"):
             dictedData = [i for i in dictedData if i["Вид материала"] == material_type]
@@ -65,6 +68,27 @@ class Model:
             self.excel.loc[rowID, "Остаток"] = int(rest) + amount
 
         print(self.excel.loc[rowID, "Остаток"])
+        self.update_status(rowID=rowID, rest=int(rest))
+
+    def get_data_length(self, **filters):
+        return len(self.get_data(**filters))
 
     def get_row_data(self, rowID: int):
-        return self.excel.loc(rowID)
+        return self.excel.iloc[rowID].values.tolist()
+    
+    def update_status(self, rowID: int, rest: int):
+        if rest == 0:
+            self.excel.loc[rowID, "Статус"] = "Нет в наличии"
+        elif rest <= 300:
+            self.excel.loc[rowID, "Статус"] = "Используется"
+        else:
+            self.excel.loc[rowID, "Статус"] = "Добавлен"
+
+    def get_dropdown_elements(self):
+        out = []
+        data = self.excel.values.tolist()
+        dictedData = [dict(zip(self.columns, i)) for i in data]
+        for i in dictedData:
+            out.append(f"{i['ID']} | {i['Вид материала']} | {i['Цвет']}")
+
+        return out
