@@ -28,7 +28,7 @@ class AddTab(CTkFrame):
 
         self.tab_label_1 = CTkLabel(self.tab, text="Вид материала")
         self.tab_label_1.place(y=26, x=2)
-        self.tab_label_2 = CTkLabel(self.tab, text="Размер/Вес")
+        self.tab_label_2 = CTkLabel(self.tab, text="Вес/Размер")
         self.tab_label_2.place(y=26, x=98)
         self.tab_label_3 = CTkLabel(self.tab, text="Сечение")
         self.tab_label_3.place(y=26, x=192)
