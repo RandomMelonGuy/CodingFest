@@ -117,5 +117,5 @@ class TestPresenter:
         else:
             return False
         
-    def prepare_date(self):
-        return datetime.now().strftime("%d.%m.%Y")
+    def prepare_date(self, data):
+        return [datetime.now().strftime("%d.%m.%Y")] + data

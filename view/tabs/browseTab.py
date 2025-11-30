@@ -58,6 +58,7 @@ class BrowseTab(CTkFrame):
 
     def setupData(self):
         self.values = self.presenter.get_data(self.curIndex, self.curIndex + self.per_page)
+        self.table.configure(values=self.values)
 
     def apply_filters(self):
         self.curIndex = 0

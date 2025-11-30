@@ -62,15 +62,18 @@ class Model:
     def editRow(self, amount: int, rowID: int, operation: str):
         #row_index = self.excel[self.excel["ID"] == rowID].index
         rest = self.excel.loc[rowID, "Остаток"]
-        if operation == "substract" and rest.astype(int) < amount:
+        new_rest = rest
+        if operation == "substract" and rest < amount:
             return "UNABLE TO PROCEED"
-        elif operation == "substract" and rest.astype(int) >= amount:
-            self.excel.loc[rowID, "Остаток"] = rest.astype(int) - amount
+        elif operation == "substract" and rest >= amount:
+            self.excel.loc[rowID, "Остаток"] = rest - amount
+            new_rest -= amount
         elif operation == "add":
-            self.excel.loc[rowID, "Остаток"] = rest.astype(int) + amount
+            self.excel.loc[rowID, "Остаток"] = rest + amount
+            new_rest += amount
 
-        print(self.excel.loc[rowID, "Остаток"])
-        self.update_status(rowID=rowID, rest=int(rest))
+        print(rest)
+        self.update_status(rowID=rowID, rest=int(new_rest))
 
     def get_data_length(self, **filters):
         return len(self.get_data(**filters))
@@ -81,7 +84,7 @@ class Model:
     def update_status(self, rowID: int, rest: int):
         if rest == 0:
             self.excel.loc[rowID, "Статус"] = "Нет в наличии"
-        elif rest <= 300:
+        elif rest <= 300 and rest > 0:
             self.excel.loc[rowID, "Статус"] = "Используется"
         else:
             self.excel.loc[rowID, "Статус"] = "Добавлен"
